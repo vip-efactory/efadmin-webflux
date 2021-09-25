@@ -1,9 +1,13 @@
 package vip.efactory.service;
 
+import reactor.core.publisher.Mono;
 import vip.efactory.ejpa.base.service.IBaseService;
 import vip.efactory.domain.GenConfig;
 
 
+/**
+ * @author dusuanyun
+ */
 public interface GenConfigService extends IBaseService<GenConfig, Long> {
 
     /**
@@ -19,5 +23,5 @@ public interface GenConfigService extends IBaseService<GenConfig, Long> {
      * @param genConfig 表配置
      * @return 表配置
      */
-    GenConfig update(String tableName, GenConfig genConfig);
+    Mono<GenConfig> update(String tableName, GenConfig genConfig);
 }

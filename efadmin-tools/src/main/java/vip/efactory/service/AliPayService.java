@@ -1,6 +1,7 @@
 package vip.efactory.service;
 
 
+import reactor.core.publisher.Mono;
 import vip.efactory.ejpa.base.service.IBaseService;
 import vip.efactory.domain.AlipayConfig;
 import vip.efactory.domain.vo.TradeVo;
@@ -29,12 +30,12 @@ public interface AliPayService extends IBaseService<AlipayConfig, Long> {
      * 查询配置
      * @return AlipayConfig
      */
-    AlipayConfig find();
+    Mono<AlipayConfig> find();
 
     /**
      * 更新配置
      * @param alipayConfig 支付宝配置
      * @return AlipayConfig
      */
-    AlipayConfig update(AlipayConfig alipayConfig);
+    Mono<AlipayConfig> update(AlipayConfig alipayConfig);
 }

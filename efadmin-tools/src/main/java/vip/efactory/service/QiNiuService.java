@@ -2,9 +2,10 @@ package vip.efactory.service;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-import vip.efactory.ejpa.base.service.IBaseService;
+import reactor.core.publisher.Mono;
 import vip.efactory.domain.QiniuConfig;
 import vip.efactory.domain.QiniuContent;
+import vip.efactory.ejpa.base.service.IBaseService;
 import vip.efactory.service.dto.QiniuQueryCriteria;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,14 +33,14 @@ public interface QiNiuService extends IBaseService<QiniuConfig, Long> {
      * 查配置
      * @return QiniuConfig
      */
-    QiniuConfig find();
+    Mono<QiniuConfig> find();
 
     /**
      * 修改配置
      * @param qiniuConfig 配置
      * @return QiniuConfig
      */
-    QiniuConfig update(QiniuConfig qiniuConfig);
+    Mono<QiniuConfig> update(QiniuConfig qiniuConfig);
 
     /**
      * 上传文件
@@ -54,7 +55,7 @@ public interface QiNiuService extends IBaseService<QiniuConfig, Long> {
      * @param id 文件ID
      * @return QiniuContent
      */
-    QiniuContent findByContentId(Long id);
+    Mono<QiniuContent> findByContentId(Long id);
 
     /**
      * 下载文件

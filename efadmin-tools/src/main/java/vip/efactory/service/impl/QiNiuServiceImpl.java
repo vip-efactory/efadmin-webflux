@@ -19,20 +19,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 import vip.efactory.common.base.page.EPage;
-import vip.efactory.ejpa.base.service.impl.BaseServiceImpl;
 import vip.efactory.domain.QiniuConfig;
 import vip.efactory.domain.QiniuContent;
+import vip.efactory.ejpa.base.service.impl.BaseServiceImpl;
 import vip.efactory.exception.BadRequestException;
 import vip.efactory.repository.QiNiuConfigRepository;
 import vip.efactory.repository.QiniuContentRepository;
 import vip.efactory.service.QiNiuService;
 import vip.efactory.service.dto.QiniuQueryCriteria;
-import vip.efactory.utils.*;
+import vip.efactory.utils.FileUtil;
+import vip.efactory.utils.QiNiuUtil;
+import vip.efactory.utils.QueryHelp;
+import vip.efactory.utils.ValidationUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @CacheConfig(cacheNames = "qiNiu")
@@ -61,15 +68,18 @@ public class QiNiuServiceImpl extends BaseServiceImpl<QiniuConfig, Long, QiNiuCo
 
     @Override
     @Cacheable(key = "'1'")
-    public QiniuConfig find() {
-        Optional<QiniuConfig> qiniuConfig = br.findById(1L);
-        return qiniuConfig.orElseGet(QiniuConfig::new);
+    public Mono<QiniuConfig> find() {
+        Mono<QiniuConfig> qiniuConfig = br.findById(1L);
+        if (null == qiniuConfig.block()){
+            return Mono.just(new QiniuConfig());
+        }
+        return qiniuConfig;
     }
 
     @Override
     @CachePut(cacheNames = "qiNiuConfig", key = "'1'")
     @Transactional(rollbackFor = Exception.class)
-    public QiniuConfig update(QiniuConfig qiniuConfig) {
+    public Mono<QiniuConfig> update(QiniuConfig qiniuConfig) {
         String http = "http://", https = "https://";
         if (!(qiniuConfig.getHost().toLowerCase().startsWith(http)||qiniuConfig.getHost().toLowerCase().startsWith(https))) {
             throw new BadRequestException("外链域名必须以http://或者https://开头");
@@ -116,9 +126,12 @@ public class QiNiuServiceImpl extends BaseServiceImpl<QiniuConfig, Long, QiNiuCo
 
     @Override
     @Cacheable
-    public QiniuContent findByContentId(Long id) {
-        QiniuContent qiniuContent = qiniuContentRepository.findById(id).orElseGet(QiniuContent::new);
-        ValidationUtil.isNull(qiniuContent.getId(),"QiniuContent", "id",id);
+    public Mono<QiniuContent> findByContentId(Long id) {
+        Mono<QiniuContent> qiniuContent = qiniuContentRepository.findById(id);
+        if (null == qiniuContent.block()){
+            qiniuContent = Mono.just(new QiniuContent());
+        }
+        ValidationUtil.isNull(qiniuContent.block().getId(),"QiniuContent", "id",id);
         return qiniuContent;
     }
 

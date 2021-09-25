@@ -4,6 +4,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import vip.efactory.domain.GenConfig;
 import vip.efactory.ejpa.base.service.impl.BaseServiceImpl;
 import vip.efactory.repository.GenConfigRepository;
@@ -13,6 +14,9 @@ import java.io.File;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+/**
+ * @author dusuanyun
+ */
 @Service
 @CacheConfig(cacheNames = "genConfig")
 public class GenConfigServiceImpl extends BaseServiceImpl<GenConfig, Long, GenConfigRepository> implements GenConfigService {
@@ -28,7 +32,7 @@ public class GenConfigServiceImpl extends BaseServiceImpl<GenConfig, Long, GenCo
 
     @Override
     @CachePut(key = "#p0")
-    public GenConfig update(String tableName, GenConfig genConfig) {
+    public Mono<GenConfig> update(String tableName, GenConfig genConfig) {
         // 如果 api 路径为空，则自动生成路径
         if(isBlank(genConfig.getApiPath())){
             String separator = File.separator;

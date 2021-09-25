@@ -10,14 +10,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import vip.efactory.ejpa.base.service.impl.BaseServiceImpl;
+import reactor.core.publisher.Mono;
 import vip.efactory.domain.AlipayConfig;
 import vip.efactory.domain.vo.TradeVo;
+import vip.efactory.ejpa.base.service.impl.BaseServiceImpl;
 import vip.efactory.exception.BadRequestException;
 import vip.efactory.repository.AliPayRepository;
 import vip.efactory.service.AliPayService;
-
-import java.util.Optional;
 
 @Service
 @CacheConfig(cacheNames = "alipay")
@@ -87,15 +86,18 @@ public class AliPayServiceImpl extends BaseServiceImpl<AlipayConfig, Long, AliPa
 
     @Override
     @Cacheable(key = "'1'")
-    public AlipayConfig find() {
-        Optional<AlipayConfig> alipayConfig = br.findById(1L);
-        return alipayConfig.orElseGet(AlipayConfig::new);
+    public Mono<AlipayConfig> find() {
+        Mono<AlipayConfig> alipayConfig = br.findById(1L);
+        if (null == alipayConfig.block()){
+            return Mono.just(new AlipayConfig());
+        }
+        return alipayConfig;
     }
 
     @Override
     @CachePut(key = "'1'")
     @Transactional(rollbackFor = Exception.class)
-    public AlipayConfig update(AlipayConfig alipayConfig) {
+    public Mono<AlipayConfig> update(AlipayConfig alipayConfig) {
         return br.save(alipayConfig);
     }
 }
