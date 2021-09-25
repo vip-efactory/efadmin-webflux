@@ -32,7 +32,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
-        <ejpa.starter.version>4.1.0</ejpa.starter.version>
+        <ejpa.starter.version>0.0.1</ejpa.starter.version>
         <querydsl.version>4.3.1</querydsl.version>
         <jedis.version>3.2.0</jedis.version>
         <log4jdbc.version>1.16</log4jdbc.version>
@@ -51,7 +51,7 @@
         <!-- 引入自己分装的ejpa模块 -->
         <dependency>
             <groupId>vip.efactory</groupId>
-            <artifactId>ejpa-spring-boot-starter</artifactId>
+            <artifactId>ejpa-webflux-spring-boot-starter</artifactId>
             <version>${ejpa.starter.version}</version>
             <type>pom</type>
             <exclusions>
@@ -250,7 +250,7 @@
             <!-- 引入自己分装的ejpa模块 -->
             <dependency>
                 <groupId>vip.efactory</groupId>
-                <artifactId>ejpa-spring-boot-starter</artifactId>
+                <artifactId>ejpa-webflux-spring-boot-starter</artifactId>
                 <version>${ejpa.starter.version}</version>
                 <type>pom</type>
             </dependency>

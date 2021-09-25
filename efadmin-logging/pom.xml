@@ -12,11 +12,11 @@
     <artifactId>efadmin-logging</artifactId>
 
     <dependencies>
-        <!-- 引入ejpa模块 -->
+        <!-- 引入ejpa-webflux模块 -->
         <dependency>
             <groupId>vip.efactory</groupId>
-            <artifactId>ejpa-spring-boot-starter</artifactId>
-            <version>${ejpa.starter.version}</version>
+            <artifactId>ejpa-webflux-spring-boot-starter</artifactId>
+<!--            <version>${ejpa.starter.version}</version>-->
             <type>pom</type>
         </dependency>
 
